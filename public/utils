@@ -1,0 +1,121 @@
+ ---------------        ------------------------
+|               |       |                       |
+|   profile     |       | Trajets participation |
+|               |       |                       |
+ ---------------         -----------------------
+
+
+ ------------         -----------------------        -----------
+|            |       |                       |      |           |
+|   profile  |       | Trajets participation |      |    Cars   |
+|            |       |                       |      |           |
+ ------------         -----------------------        -----------
+
+                     ------------------------
+                    |                       |
+                    | Trajets participation |
+                    |                       |
+                     -----------------------
+
+
+<aside className="border rounded-sm p-6 w-1/3">
+    <UserProfile/>
+</aside>
+<section className="flex-1">
+    <h2 className="text-2xl font-semibold mb-4">Mes participations</h2>
+    <CarpoolTable/>
+    
+    
+</section>
+
+<div className="my-2 flex flex-col">
+                <button onClick={handleClick} className={`flex justify-between px-2 py-1  w-full`}>
+                    <div>
+                        <span className="capitalize">renault,&nbsp;zoe</span>
+                    </div>
+                    <div className="flex items-center gap-3"> 
+                        <span>FY-564-PD </span>
+                        {isOpen ?<ChevronDown/>: <ChevronRight/> }
+                    </div>
+                </button>
+
+                <div className={`px-2 py-2 ${!isOpen && "hidden" }`}> 
+                    <div className="text-sm"> 
+                        <span>Date d'immatriculation&nbsp;:&nbsp;</span>
+                        <span>21/04/2021</span>
+                    </div>
+                    <div className="text-sm"> 
+                        <span>Energie&nbsp;:&nbsp;</span>
+                        <span className="capitalize">Electrique</span>
+                    </div>
+                
+                    <div className="flex justify-between">
+                        <div className="text-sm"> 
+                            <span>Couleur&nbsp;:&nbsp;</span>
+                            <span className="capitalize">Bleu</span>
+                        </div>
+                        {/*<ButtonDeleteCar car={data}/>*** Non implémenter pour le moment car suppression des carpooling non désiré*/}
+                    </div>
+                </div>
+            </div>
+
+            <div className="my-2 flex flex-col bg-sky-400">
+                <button onClick={handleClick} className={`flex justify-between px-2 py-1  w-full`}>
+                    <div>
+                        <span className="capitalize">renault,&nbsp;zoe</span>
+                    </div>
+                    <div className="flex items-center gap-3"> 
+                        <span>FY-564-PD </span>
+                        {isOpen ?<ChevronDown/>: <ChevronRight/> }
+                    </div>
+                </button>
+
+                <div className={`px-2 py-2 ${!isOpen && "hidden" }`}> 
+                    <div className="text-sm"> 
+                        <span>Date d'immatriculation&nbsp;:&nbsp;</span>
+                        <span>21/04/2021</span>
+                    </div>
+                    <div className="text-sm"> 
+                        <span>Energie&nbsp;:&nbsp;</span>
+                        <span className="capitalize">Electrique</span>
+                    </div>
+                
+                    <div className="flex justify-between">
+                        <div className="text-sm"> 
+                            <span>Couleur&nbsp;:&nbsp;</span>
+                            <span className="capitalize">Bleu</span>
+                        </div>
+                        {/*<ButtonDeleteCar car={data}/>*** Non implémenter pour le moment car suppression des carpooling non désiré*/}
+                    </div>
+                </div>
+            </div>
+            <div className="my-2 flex flex-col bg-amber-600">
+                <button onClick={handleClick} className={`flex justify-between px-2 py-1  w-full`}>
+                    <div>
+                        <span className="capitalize">dacia,&nbsp;duster</span>
+                    </div>
+                    <div className="flex items-center gap-3"> 
+                        <span>EA-564-FG</span>
+                        {isOpen ?<ChevronDown/>: <ChevronRight/> }
+                    </div>
+                </button>
+
+                <div className={`px-2 py-2 ${!isOpen && "hidden" }`}> 
+                    <div className="text-sm"> 
+                        <span>Date d'immatriculation&nbsp;:&nbsp;</span>
+                        <span>27/08/2016</span>
+                    </div>
+                    <div className="text-sm"> 
+                        <span>Energie&nbsp;:&nbsp;</span>
+                        <span className="capitalize">Diesel</span>
+                    </div>
+                
+                    <div className="flex justify-between">
+                        <div className="text-sm"> 
+                            <span>Couleur&nbsp;:&nbsp;</span>
+                            <span className="capitalize">Bleu nuit</span>
+                        </div>
+                        {/*<ButtonDeleteCar car={data}/>*** Non implémenter pour le moment car suppression des carpooling non désiré*/}
+                    </div>
+                </div>
+            </div>
