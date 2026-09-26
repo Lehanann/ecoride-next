@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { House, Car, Form, LayoutDashboard } from 'lucide-react'
 import { useState } from "react"
+import { useAuth } from "@/hooks/useAuth"
 
 const menuNav = [
     { id:1, name:'Accueil', path: '/', icon: House},
@@ -13,7 +14,7 @@ const menuNav = [
 
 export default function NavBar(){
 
-    const [dashboard, stateDashboard] = useState(true)
+    const { user } = useAuth()
 
 
     return(
@@ -30,7 +31,7 @@ export default function NavBar(){
                     ))
                 }
                 {
-                    dashboard === true && (
+                    user && (
                         <li>
                             <Link href="/dashboard" className="flex items-center gap-2 hover:text-[var(--color-accent)] transition-colors duration-300">
                                 <LayoutDashboard/>

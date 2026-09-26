@@ -3,7 +3,7 @@ import { Mail } from 'lucide-react';
 
 export default function Footer(){
     return(
-        <footer className="bg-gray-900 py-10 text-white">
+        <footer className="bg-gray-900 py-10 text-white mt-auto">
             <div className="container mx-auto py-10 flex flex-col gap-4">
                 <p className="text-lg font-medium">Ecoride</p>
                 

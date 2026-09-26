@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Poppins, Inter } from "next/font/google";
 import "../globals.css";
 import { cn } from "@/lib/utils";
+import UserLayoutClient from "@/components/layout/UserLayoutClient";
+
 
 const inter = Inter({subsets:['latin'],variable:'--font-sans'});
 
@@ -21,8 +23,10 @@ export default function AuthLayout({
   children: React.ReactNode;
 }>) {
   return (   
-      <main className="max-w-[1500] mx-auto p-12 flex flex-col gap-10">
-        {children}        
+      <main className="w-full max-w-[1500px] mx-auto py-12">
+        <UserLayoutClient>
+          {children}
+        </UserLayoutClient>                
       </main> 
   );
 }

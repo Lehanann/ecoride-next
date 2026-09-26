@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import EmployeeLayoutClient from "@/components/layout/EmployeeLayoutClient";
 
 export const metadata: Metadata = {
   title: "Moderator Dashboard",
@@ -10,9 +11,13 @@ export default function EmployeeLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (   
-      <main className="max-w-[1500] border mx-auto p-12 flex flex-col gap-10">
-        {children}        
-      </main> 
+
+  return (
+    <main className="max-w-[1500] border mx-auto p-12 flex flex-col gap-10">
+      <EmployeeLayoutClient>
+          {children}  
+      </EmployeeLayoutClient>   
+    </main>      
+     
   );
 }

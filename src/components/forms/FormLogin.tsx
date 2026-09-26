@@ -1,14 +1,17 @@
 "use client"
-import { Label } from "../ui/label"
-import { Input } from "../ui/input"
-import { Button } from "../ui/button"
-
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from "next/link";
 
 import { useRouter } from "next/navigation";
+import { getCurrentUser, login } from "@/services/auth";
+import { useAuth } from '@/hooks/useAuth';
+
+import { Label } from "../ui/label"
+import { Input } from "../ui/input"
+import { Button } from "../ui/button"
+import { toast } from "sonner";
 
 const formSchema = z.object({
     email: z.email(),
@@ -21,6 +24,8 @@ export default function FormLogin(){
 
     const router = useRouter()
 
+    const { setUser } = useAuth();
+
     const { register, handleSubmit, formState: {errors} } = useForm<FormData>({
         resolver: zodResolver(formSchema),
         defaultValues:{
@@ -30,23 +35,31 @@ export default function FormLogin(){
     })
 
     async function onSubmit(values: FormData){
+
         try{
-            const params = values
-            //à adapter pour authentification au moment où le backend aura le middleware de prêt
-            /*
-            if (roles.includes("ADMIN")) {
-            router.push("/admin");
+            await login(
+                values.email,
+                values.password,
+            );
+            
+            const user = await getCurrentUser();
+            setUser(user)
+
+            if (user.roles.some(role => role.name === "administrator")) {
+                router.push("/admin");
             }
-            else if (roles.includes("EMPLOYEE")) {
-            router.push("/moderation");
+            else if (user.roles.some(role => role.name === "employee")) {
+                router.push("/moderation");
             }
             else {
-            router.push("/dashboard");
-            }*/
- 
+                router.push("/dashboard");
+            }
+            toast.success("Vous êtes maintenant connecté")
+            router.refresh();
         }
-        catch(error){
-
+        catch(error: any){
+            toast.error("Compte ou mot de passe erroné")
+            router.refresh()
         }
     }
 

@@ -1,16 +1,34 @@
+"use client"
 import Hero from "@/components/hero/hero";
 import SearchBar from "@/components/sections/SearchBar";
 import { Sprout, HandCoins, Handshake, Search, MousePointer2, Car } from 'lucide-react';
 import Image from "next/image";
 import Mountains from "../../public/mountains.jpg";
 import Notice from "../../public/noticesv2.png";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import { SearchData } from "@/types/search";
 
 export default function HomePage() {
+
+  const router = useRouter()
+
+  function handleSearch(data: SearchData){
+    const params = new URLSearchParams({
+      departure: data.departure_location,
+      arrival: data.end_location,
+      date: data.departure_date
+    })
+
+    router.push(`/carpooling?${params.toString()}`)
+
+  }
+ 
   return (
     <main className="w-full">
       <Hero />
       <section className="container mx-auto my-20">
-        <SearchBar/>
+        <SearchBar onSearch={handleSearch}/>
 
         <article className="mt-20 flex gap-15 items-center">
           <div className="w-2/3">
@@ -76,7 +94,7 @@ export default function HomePage() {
             </div>
           </div>
         </article>
-
+        
       </section>
     </main>
   );

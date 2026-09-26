@@ -18,12 +18,10 @@ export default function RootLayoutClient({
     pathname.startsWith("/register");
 
   return (
-    <>
+    <div className="min-h-full flex flex-col">
       {!isAuthPage && <Header />}
-
       {children}
-
-      {!isAuthPage && <Footer />}
-    </>
+      {!isAuthPage && <Footer />}  
+    </div>
   );
 }

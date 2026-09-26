@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-
+import AdminLayoutClient from "@/components/layout/AdminLayoutClient";
 
 export const metadata: Metadata = {
   title: "Administration Dshboard",
@@ -12,8 +12,10 @@ export default function AdminLayout({
   children: React.ReactNode;
 }>) {
   return (   
-      <main className="max-w-7xl mx-auto p-12 flex flex-col gap-10">
-        {children}        
+      <main className="w-full border">
+        <AdminLayoutClient>
+          {children} 
+        </AdminLayoutClient>               
       </main> 
   );
 }

@@ -1,48 +1,70 @@
-import React from "react"
-import CarpoolsManager from "@/components/dashboard/driver/CarpoolsManager";
-import Cars from "@/components/dashboard/driver/Cars";
-import Participations from "@/components/dashboard/passenger/Participation";
-import UserProfile from "@/components/dashboard/profile/UserProfile";
+"use client"
+import { useEffect } from "react"
+
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/hooks/useAuth";
+
+import { User, Activity} from "lucide-react";
 
 export default function DashboardPage(){
 
-    const isDriver = true;
-    const isPassenger = true;
-  
+    const { user, isLoading } = useAuth()
 
-    if (isPassenger && !isDriver){
-        return(
-            <section className="grid grid-cols-[1fr_4fr]">
-                <UserProfile isDriver={isDriver} isPassenger={isPassenger}/>
-                <Participations />
-            </section>
-        )
-    }
-    if (isDriver && !isPassenger){
-        return(
-            <section className="grid grid-cols-[1fr_4fr]">
-                <aside className="flex flex-col gap-10">
-                    <UserProfile isDriver={isDriver} isPassenger={isPassenger} />
-                    <Cars />
-                </aside>               
-                <CarpoolsManager />
-               
-            </section>
-        )
-    }
+    const router = useRouter()
 
-    return (
-        <section className="flex flex-col gap-10">
-            <article className="grid grid-cols-[1fr_3fr_1fr] gap-6">            
-                <UserProfile isDriver={isDriver} isPassenger={isPassenger} />
-                <Participations />
-                <Cars />
-            </article>
-            <article>
-                <CarpoolsManager></CarpoolsManager>
-            </article>
-        </section>
-        
+    useEffect(()=>{
+
+        if(isLoading) return;
+
+        if (!user){
+            router.replace("/login");
+            return;
+        }
+
+    }, [user, isLoading, router])
+
+    if (isLoading){return <p>Chargement...</p>}
+
+    if (!user) {return null}
+    
+    const isDriver = user.roles.some( role => role.name === "driver")
+    
+    const isPassenger = user.roles.some( role => role.name === "passenger")
+
+   return(
+    <section className="space-y-7">
+        <h4 className="text-2xl font-medium">Dashboard</h4>
+        <h3 className="text-3xl font-semibold">Bonjour,&nbsp;👋&nbsp;{user.username}.</h3> 
+        <div>
+            <h6 className="text-xl font-semibold flex items-center gap-1"><User size={18}/>Informations personnelles</h6>
+            <hr className="border-zinc-400 mt-2 mb-4"></hr>
+            <div className="px-5 space-y-2">
+                <p>
+                    <span className="text-zinc-500">Prénom&nbsp;:&nbsp;</span>
+                    <span className="capitalize font-medium">{user.firstname}</span>
+                </p>
+                <p className="">
+                    <span className="text-zinc-500">Nom&nbsp;:&nbsp;</span>
+                    <span className="capitalize font-medium">{user.lastname}</span></p>
+                <p className="flex items-center">📞&nbsp;:&nbsp;{user.phone}</p>
+                <p className="flex items-center">📒&nbsp;:&nbsp;{user.address}</p>
+            </div>
+        </div>
+        <div>
+            <h6 className="text-xl font-semibold flex items-center gap-1"><Activity size={18}/>Activité récente</h6>
+             <hr className="border-zinc-400 mt-2 mb-4"></hr>
+            <div className="px-6 space-y-4">
+                <p>💸 Solde actuel : <span className="font-medium">{user.credit}</span>&nbsp;Crédits</p> 
+                {
+                    isDriver &&
+                    <p className="">🚙 Vous avez proposé ... trajets</p>
+                }
+                {
+                    isPassenger &&
+                    <p>📅 Vous avez participé à un total de x covoiturages</p>
+                }
+            </div>
+        </div>
+    </section>
     )
-            
 }

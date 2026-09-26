@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { Poppins, Inter } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
 import { cn } from "@/lib/utils";
 import RootLayoutClient from "@/components/layout/RootLayoutClient";
+import { Toaster } from "@/components/ui/sonner";
+import { AuthProvider } from "@/contexts/AuthContext";
 
 const inter = Inter({subsets:['latin'],variable:'--font-sans'});
 
@@ -30,10 +30,22 @@ export default function RootLayout({
       data-scroll-behavior="smooth"
       className={cn("h-full", "antialiased", poppins.className, "font-sans", inter.variable)}
     >
-      <body className="min-h-full ">
-        <RootLayoutClient>
-        {children}
-        </RootLayoutClient>
+      <body className="h-full">
+        
+        <AuthProvider>
+          
+            <RootLayoutClient>
+              {children}            
+            <Toaster 
+              position="top-right"
+              richColors
+              closeButton
+            />
+          </RootLayoutClient>
+          
+          
+        </AuthProvider>
+      
       </body>
     </html>
   );

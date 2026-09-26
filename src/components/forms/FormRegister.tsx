@@ -10,6 +10,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import Link from "next/link";
 
 import { useRouter } from "next/navigation";
+import { apiFetch } from "@/services/api";
 
 const formSchema = z.object({
     username: z.string().min(1, "ce champs est requis"),
@@ -42,7 +43,11 @@ export default function FormRegister(){
     async function onSubmit(values: FormData){
         try{
             const params = values
-
+            await apiFetch("/users",{
+                method: "POST",
+                body: JSON.stringify({username:params.username, email: params.email, password: params.password, confirm_password: params.confirm_password})
+            })
+            router.push("/login")
         }
         catch(error){
 
