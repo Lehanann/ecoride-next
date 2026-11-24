@@ -3,11 +3,20 @@
 import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
 
-import FormHosting from "@/components/forms/FormHosting";
 import { useEffect } from "react";
 import Hosting from "@/components/dashboard/driver/Hosting";
 
-
+/**
+ * Driver carpooling management page.
+ *
+ * Allows drivers to manage their carpoolings,
+ * including trip creation, publication, completion,
+ * and cancellation.
+ *
+ * Access is restricted to users with the driver role.
+ *
+ * @returns Driver carpooling management page.
+ */
 export default function HostingPage() {
 
     const { user, isLoading } = useAuth()
@@ -18,19 +27,15 @@ export default function HostingPage() {
 
     useEffect(()=>{
         if (isLoading) return;
-
         if (!user){
             router.replace("/login");
             return;
         }
-
         if (!isDriver){
             router.replace("/forbidden");
             return;
         }
-
     }, [user, isLoading, isDriver, router])
-
 
     if (isLoading){return <p>Chargement</p>}
 

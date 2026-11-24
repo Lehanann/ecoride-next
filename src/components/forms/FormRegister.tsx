@@ -1,17 +1,30 @@
 "use client"
 
-import { Label } from "../ui/label"
-import { Input } from "../ui/input"
-import { Button } from "../ui/button"
-
+import Link from "next/link";
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import Link from "next/link";
 
 import { useRouter } from "next/navigation";
 import { apiFetch } from "@/services/api";
 
+import { Label } from "../ui/label"
+import { Input } from "../ui/input"
+import { Button } from "../ui/button"
+import { toast } from "sonner";
+
+/**
+ * Registration form validation schema.
+ *
+ * Defines validation rules applied before creating
+ * a new user account.
+ *
+ * Ensures that:
+ * - Required fields are provided.
+ * - The email address is valid.
+ * - Passwords meet the minimum length requirement.
+ * - The confirmation password matches the password.
+ */
 const formSchema = z.object({
     username: z.string().min(1, "ce champs est requis"),
     email: z.email().max(254, {message: "Ce champs ne respecte pas la limite de 254 caractères max"}),
@@ -26,6 +39,19 @@ const formSchema = z.object({
 
 type FormData = z.infer<typeof formSchema>;
 
+/**
+ * User registration form.
+ *
+ * Allows visitors to create a new account by providing:
+ * - A username
+ * - An email address
+ * - A password
+ * - A password confirmation
+ *
+ * Form validation is performed using react-hook-form and zod.
+ *
+ * @returns Registration form component.
+ */
 export default function FormRegister(){
 
     const router = useRouter()
@@ -40,6 +66,15 @@ export default function FormRegister(){
         }
     })
 
+    /**
+     * Handles registration form submission.
+     *
+     * Sends the registration data to the backend API
+     * and redirects the user to the login page after
+     * successful account creation.
+     *
+     * @param values Validated registration data.
+     */
     async function onSubmit(values: FormData){
         try{
             const params = values
@@ -48,9 +83,10 @@ export default function FormRegister(){
                 body: JSON.stringify({username:params.username, email: params.email, password: params.password, confirm_password: params.confirm_password})
             })
             router.push("/login")
+            toast.success("Votre compte a été créé avec succès.")
         }
-        catch(error){
-
+        catch(error:any){
+            toast.error(error.message)
         }
     }
 
@@ -85,7 +121,7 @@ export default function FormRegister(){
             </div>
             <Link href="/login" className="text-sm text-red-500 font-medium">Déjà un compte? Connectez-vous</Link>
             <div className="flex items-center justify-between mt-5 mb-2">
-                <Button onClick={()=>router.push("/")} variant="outline" className="tracking-wider px-4">Annuler</Button>
+                <Button type="button" onClick={()=>router.push("/")} variant="outline" className="tracking-wider px-4">Annuler</Button>
                 <Button type="submit" className="bg-[var(--color-primary)] tracking-wider px-4 ">Valider</Button>                
             </div>           
         </form>

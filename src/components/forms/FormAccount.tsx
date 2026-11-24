@@ -13,7 +13,12 @@ import { Input } from "../ui/input"
 import { Button } from "../ui/button"
 import { toast } from 'sonner';
 
-
+/**
+ * Account update form validation schema.
+ *
+ * Defines validation rules applied before updating
+ * account information.
+ */
 const formSchema = z.object({
     username: z.string().max(100, {message: "Ce champs ne peut excéder 100 caractères"}),
     email: z.email({error: "Adresse email invalide"}).max(254, {message: "Ce champs ne peut excéder 254 caractères"}),
@@ -21,6 +26,16 @@ const formSchema = z.object({
 
 type FormData = z.infer<typeof formSchema>;
 
+/**
+ * Account management form.
+ *
+ * Allows authenticated users to update their account information,
+ * including their username and email address.
+ *
+ * Form validation is performed using react-hook-form and zod.
+ *
+ * @returns Account update form component.
+ */
 export default function FormAccount(){
 
     const { user, setUser } = useAuth()
@@ -32,7 +47,15 @@ export default function FormAccount(){
                 email: user?.email ?? "",           
             }
         })
-    
+        /**
+         * Handles account update form submission.
+         *
+         * Sends updated account information to the backend API,
+         * updates the authenticated user stored in the authentication
+         * context, and displays a success or error notification.
+         **
+         * @param values Validated account data.
+         */
         async function onSubmit(values: FormData){
              
             try{

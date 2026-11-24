@@ -3,9 +3,10 @@
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from "next/navigation";
 
 import { apiFetch } from '@/services/api';
+import { Car } from '@/types/car'
+
 import { Label } from '../ui/label';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
@@ -22,21 +23,12 @@ import { MoveRight } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
-interface Brand{
-    id: number,
-    name: string
-}
-
-interface Car{
-    id: number,
-    model: string,
-    registration: string,
-    first_date_registration: Date,
-    energy: string,
-    color: string,
-    brand: Brand
-}
-
+/**
+ * Carpooling creation form validation schema.
+ *
+ * Defines validation rules applied before creating
+ * a new carpooling trip.
+ */
 const formSchema = z.object({
     departure_date: z.iso.date({message: "La date de départ est obligatoire"}),
     departure_time: z.iso.time({message: "L'heure de départ est obligatoire"}),
@@ -49,29 +41,53 @@ const formSchema = z.object({
     car_id: z.number()
 });
 
-type FormData = z.infer<typeof formSchema>;
-
+/**
+ * Properties accepted by the FormHosting component.
+ *
+ * Properties:
+ * - onCancel: Optional callback executed when the form is cancelled.
+ */
 type FormHostingProps = {
-    onCancel?: ()=>void
+    onCancel?: () => void
+    onSuccess?: () => void
 }
 
+type FormData = z.infer<typeof formSchema>;
+
+/**
+ * Carpooling creation form.
+ *
+ * Allows drivers to create a new carpooling trip by providing:
+ * - Departure information
+ * - Destination information
+ * - Trip schedule
+ * - Seat availability
+ * - Price
+ * - Vehicle selection
+ *
+ * Form validation is performed using react-hook-form and zod.
+ *
+ * @param props Component properties
+ * @param props.onCancel Optional callback executed when the form is cancelled.
+ * @returns Carpooling creation form component.
+ */
 export default function FormHosting(
-    { onCancel } : FormHostingProps
+    { onCancel, onSuccess } : FormHostingProps
 ){
-
-    const router = useRouter();
-    
     const [ cars, setCars ] = useState<Car[]>([])
-
+  
     useEffect(()=>{
-
+        /**
+         * Retrieves all vehicles owned by the authenticated user.
+         *
+         * Loads the list of available vehicles that can be assigned
+         * to a newly created carpooling.
+         */
         async function getAllCars(){
             const allCars: Car[] = await apiFetch("/cars",{method: "GET"})
             setCars(allCars)
-            console.log(cars)
         }
         getAllCars()
-
     },[])
 
     const { register, handleSubmit , setValue, formState: {errors} } = useForm<FormData>({
@@ -81,8 +97,17 @@ export default function FormHosting(
                 price: 2.00
             }
         });
-
-     async function onSubmit(values: FormData){
+    
+    /**
+     * Handles carpooling creation form submission.
+     *
+     * Sends validated carpooling data to the backend API
+     * and displays a notification indicating whether the
+     * operation succeeded or failed.
+     *
+     * @param values Validated carpooling data.
+    */
+    async function onSubmit(values: FormData){
     
         try{
             const params = values
@@ -90,16 +115,15 @@ export default function FormHosting(
                 method:"POST",
                 body: JSON.stringify(params)
             })
+            onSuccess?.()
+            onCancel?.()
             toast.success("Le covoiturage a été créé avec succès.")
-            onCancel
-        }
-        
+            
+        }        
         catch (error: any){
             toast.error(error.message)
         }
     }
-
-
 
     return(
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-7">

@@ -3,19 +3,22 @@
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from "next/navigation";
 
 import { apiFetch } from '@/services/api';
 import { useAuth } from '@/hooks/useAuth';
+import { User } from '@/types/user';
 
 import { Label } from "../ui/label"
 import { Input } from "../ui/input"
 import { Button } from "../ui/button"
 import { toast } from 'sonner';
 
-import { User } from '@/types/user';
-
-
+/**
+ * Profile update form validation schema.
+ *
+ * Defines validation rules applied before updating
+ * the user's personal information.
+ */
 const formSchema = z.object({
     firstname: z.string().max(100, {message: "Ce champs ne peut excéder 100 caractères"}),
     lastname: z.string().max(100, {message: "Ce champs ne peut excéder 100 caractères"}),
@@ -27,7 +30,21 @@ const formSchema = z.object({
 
 type FormData = z.infer<typeof formSchema>;
 
-
+/**
+ * User profile management form.
+ *
+ * Allows authenticated users to update their personal
+ * information, including:
+ * - First name
+ * - Last name
+ * - Phone number
+ * - Address
+ * - Date of birth
+ *
+ * Form validation is performed using react-hook-form and zod.
+ *
+ * @returns User profile update form component.
+ */
 export default function FormProfile(){
 
     const { user, setUser } = useAuth()
@@ -43,10 +60,17 @@ export default function FormProfile(){
         }
     })
 
-    async function onSubmit(values: FormData){
-         
+    /**
+     * Handles profile update form submission.
+     *
+     * Sends updated profile information to the backend API,
+     * updates the authenticated user stored in the authentication
+     * context, and displays a success or error notification.
+     *
+     * @param values Validated profil* data.
+     */
+    async function onSubmit(values: FormData){ 
         try{
-            
             const params = values           
             const updatedUser = await apiFetch<User>("/users/me/profile", {
                 method: "PATCH",

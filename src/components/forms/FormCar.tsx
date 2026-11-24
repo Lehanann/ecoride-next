@@ -5,7 +5,6 @@ import { useState, useEffect } from 'react';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from "next/navigation";
 import { Energy, Brand } from "@/types/car";
 import { apiFetch } from "@/services/api";
 
@@ -22,7 +21,12 @@ import {
 } from "@/components/ui/select";
 import { toast } from 'sonner';
 
-
+/**
+ * Vehicle creation form validation schema.
+ *
+ * Defines validation rules applied before submitting
+ * a new vehicle to the backend API.
+ */
 const formSchema = z.object({
     model: z.string().min(1,"Ce champs est requis").max(50, "ce champs ne peut excéder 50 caractères"),
     registration: z.string().min(1,"Ce champs est requis").max(50, "ce champs ne peut excéder 50 caractères"),
@@ -32,23 +36,50 @@ const formSchema = z.object({
     brand_id: z.number(),
 });
 
-type FormData = z.infer<typeof formSchema>;
 
+/**
+ * Properties accepted by the FormCar component.
+ *
+ * Properties:
+ * - onCancel: Optional callback executed when the form is cancelled.
+ */
 type FormCarProps = {
-    onCancel?: ()=>void
+    onCancel?: ()=> void
+    onSuccess?: () => void
 }
 
+type FormData = z.infer<typeof formSchema>;
+
+/**
+ * Vehicle creation form.
+ *
+ * Allows users to register a new vehicle by providing:
+ * - Brand
+ * - Model
+ * - Registration number
+ * - First registration da*e
+ * - Energy type
+ * - Color
+ *
+ * Form validation is performed using react-hook-form and zod.
+ *
+ * @param props Component properties.
+ **@param props.onCancel Optional callback executed when the form is can*elled.
+ * @returns Vehicle creation form component.
+ */
 export default function FormCar(
-    {onCancel }: FormCarProps
+    {onCancel, onSuccess }: FormCarProps
 ){
-
-    const router = useRouter()
-
     const [ brands, setBrands ] = useState<Brand[]>([])
 
     useEffect(()=>{
-        async function getAllBrands(){
-            
+        /**
+         * Retrieves all available vehicle brands.
+         *
+         * Loads the list of brands used to populate
+         * the brand selection field.
+         */
+        async function getAllBrands(){            
             const allBrands: Brand[] = await apiFetch("/brands",{
                 method: "GET"
             })
@@ -62,21 +93,28 @@ export default function FormCar(
         resolver: zodResolver(formSchema),
     })
 
+    /**
+     * Handles vehicle creation form submission.
+     *
+     * Sends the validated vehicle data to the backend API
+     * and displays a notification *ndicating whether the
+     * operation succeeded or failed.
+     *
+     * @param values Validated vehicle data.
+     */
     async function onSubmit(values: FormData){
-
         try{
             const params = values
             await apiFetch("/cars", {
                 method:"POST",
                 body: JSON.stringify(params)
             })
+            onSuccess?.()
+            onCancel?.()
             toast.success("Le véhicule a été créé avec succès.")
-            router.back()
-        }
-        
+        }        
         catch (error: any){
-            toast.error(error.message);
-            
+            toast.error(error.message);            
         }
     }
 
@@ -144,11 +182,9 @@ export default function FormCar(
                 </div>
                 <div className="flex flex-col gap-2 ">
                     <Label htmlFor="color" className="text-md font-normal">Couleur.</Label>
-                    <Input {...register("color")} id="phone" type="text" placeholder="bleu" className="border border-gray-900 rounded-sm bg-white"></Input>
+                    <Input {...register("color")} id="color" type="text" placeholder="bleu" className="border border-gray-900 rounded-sm bg-white"></Input>
                     {errors.color && <p className="text-xs text-red-500">{errors.color.message}</p>}
                 </div>
-                               
-                
             </div>
             <div className="flex justify-between items-center">
                 <Button

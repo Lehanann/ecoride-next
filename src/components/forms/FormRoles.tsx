@@ -11,13 +11,33 @@ import { User } from '@/types/user';
 import { Button } from "../ui/button"
 import { toast } from 'sonner';
 
-
+/**
+ * Role selection form validation schema.
+ *
+ * Defines validation rules applied before updating
+ * the user's roles.
+ *
+ * Ensures that at least one role is selected.
+ */
 const formSchema = z.object({
     roles: z.array(z.string()).min(1, "Vous devez sélectionner au moins un role.")
 });
 
 type FormData = z.infer<typeof formSchema>;
 
+/**
+ * User role management form.
+ *
+ * Allows authenticated users to configure their application roles:
+ * - Passenger
+ * - Driver
+ *
+ * Form validation is performed using react-hook-form and zod.
+ *
+ * The authentication context is updated after a successful role change.
+ *
+ * @returns User role management form component.
+ */
 export default function FormRoles(){
 
     const { user, setUser } = useAuth()
@@ -29,19 +49,25 @@ export default function FormRoles(){
         }
     })
 
+    /**
+     * Handles role u*date form submission.
+     *
+     * Sends the selected roles to the backend API,
+     * updates the authenticated user stored in the authentication
+     * context, and displays a success or error notification.
+     *
+     * @param values Validated role data.
+     */
     async function onSubmit(values: FormData){
             
-        try{
-            
-            const params = values           
-            
+        try{            
+            const params = values            
             const updatedUser = await apiFetch<User>("/users/me/roles", {
                 method: "PATCH",
                 body: JSON.stringify(params)
             })
             toast.success("Roles mis à jour avec succès.")
-            setUser(updatedUser)
-            
+            setUser(updatedUser)            
         }
         catch (error: any){
             toast.error(error.message)

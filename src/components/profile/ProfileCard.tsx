@@ -9,6 +9,14 @@ import {
 
 import { ClipboardList } from 'lucide-react';
 
+/**
+ * Personal information card.
+ *
+ * Displays the profile information form inside
+ * a dashboard card section.
+ *
+ * @returns Personal information card component.
+ */
 export default function ProfileCard(){
 
     return(
@@ -19,7 +27,6 @@ export default function ProfileCard(){
             <CardContent>
                 <FormProfile/>
             </CardContent>
-            
         </Card>
     )
 }

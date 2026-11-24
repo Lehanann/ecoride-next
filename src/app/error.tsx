@@ -1,8 +1,23 @@
 "use client";
 
 import Link from "next/link";
+
 import { Button } from "@/components/ui/button";
 
+/**
+* Error page.
+*
+* Displays a fallback user interface when an unexpected
+* error occurs during page rendering.
+*
+* Allows users to retry the operation or return
+* to the home page.
+*
+* @param props Error page properties.
+* @param props.error Captured error instance.
+* @param props.reset Function used to retry rendering.
+* @returns Error page.
+*/
 export default function Error({
     error,
     reset,

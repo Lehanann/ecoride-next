@@ -18,6 +18,20 @@ export const metadata: Metadata = {
   description: "website of carpooling ecoresponsable",
 };
 
+/**
+* Root application layout.
+*
+* Defines the global application structure and provides:
+* - Global styling.
+* - Font configuration.
+* - Authentication context.
+* - Toast notifications.
+* - Shared application layout.
+*
+* @param props Layout properties.
+* @param props.children Application page content.
+* @returns Root application layout component.
+*/
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -30,10 +44,8 @@ export default function RootLayout({
       data-scroll-behavior="smooth"
       className={cn("h-full", "antialiased", poppins.className, "font-sans", inter.variable)}
     >
-      <body className="h-full">
-        
-        <AuthProvider>
-          
+      <body className="h-full">        
+        <AuthProvider>          
             <RootLayoutClient>
               {children}            
             <Toaster 
@@ -42,10 +54,7 @@ export default function RootLayout({
               closeButton
             />
           </RootLayoutClient>
-          
-          
-        </AuthProvider>
-      
+        </AuthProvider>      
       </body>
     </html>
   );

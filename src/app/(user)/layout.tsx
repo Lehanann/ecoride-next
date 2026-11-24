@@ -1,22 +1,22 @@
 import type { Metadata } from "next";
-import { Poppins, Inter } from "next/font/google";
 import "../globals.css";
-import { cn } from "@/lib/utils";
 import UserLayoutClient from "@/components/layout/UserLayoutClient";
-
-
-const inter = Inter({subsets:['latin'],variable:'--font-sans'});
-
-const poppins = Poppins({
-  weight:['100','200','300','400', '500', '600', '700','800','900'],
-  subsets:['latin']
-})
 
 export const metadata: Metadata = {
   title: "Ecoride",
   description: "website of carpooling ecoresponsable",
 };
 
+/**
+ * User dashboard layout.
+ *
+ * Provides a protected layout for authenticated users
+ * and wraps dashboard pages with user access control.
+ *
+ * @param props Layout properties.
+ * @param props.children Dashboard page content.
+ * @returns User dashboard layout component.
+ */
 export default function AuthLayout({
   children,
 }: Readonly<{

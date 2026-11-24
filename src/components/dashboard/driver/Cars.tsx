@@ -17,47 +17,59 @@ import {
 
 import {
   Dialog,
-  DialogClose,
   DialogContent,
-  DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
 import FormCar from "@/components/forms/FormCar";
 
+
+/**
+ * Displays and manages the user's vehicles.
+ *
+ * Features:
+ * - Retrieves vehicles associated with the authenticated user.
+ * - Displays vehicle information.
+ * - Creates new vehicles through a dialog form.
+ * - Removes vehicles using the soft delete mechanism.
+ *
+ * @returns Vehicle management component.
+ */
 export default function Cars(){
     
     const [cars, setCars ] = useState<readonly Car[]>([])
 
     const [isOpen, setIsOpen ] = useState(false)
     
+    /**
+    * Loads all vehicles belonging to the current user.
+    */
+    async function loadCars(){
+        const allCars: Car[] = await apiFetch("/cars",{method: "GET"})
+        setCars(allCars)
+    }
+
     useEffect(()=>{
-
-        async function getCarsByUser(){
-            
-            const allCars: Car[] = await apiFetch("/cars",{method: "GET"})
-            setCars(allCars)
-
-        }
-
-        getCarsByUser()
-        
-
+        loadCars()
     },[])
 
+    /**
+     * Deletes a vehicle from*the user's garage.
+     *
+     * Sends a deletion request to the API, removes the vehicle
+     * from the local stats, and displays a notification indi
+     */
     async function handleDelete(carId: number){
 
         try{
             await apiFetch(`/cars/${carId}`, { method: "DELETE"})
-            toast.success("Suppression du véhicule réussi.")
-
+            setCars((prev)=> prev.filter(car => car.id !== carId))
+            toast.success("Suppression du véhicule réussi.")            
         }
         catch(error: any){
             toast.error(error.message)
         }
-
     }
 
     return(
@@ -74,7 +86,7 @@ export default function Cars(){
                             Ajouter un nouveau véhicule
                         </DialogTitle>
                     </DialogHeader>
-                    <FormCar onCancel={()=> setIsOpen(false)}/>
+                    <FormCar onCancel={()=> setIsOpen(false)} onSuccess={loadCars}/>
                 </DialogContent>
             </Dialog>
 
@@ -107,11 +119,11 @@ export default function Cars(){
                                     <p className="font-medium">{car.color}</p> 
                                 </div>                            
                             </CardContent>
-                            <CardFooter className="flex gap-2">
-                                <Button className="rounded-md bg-sky-900 hover:bg-sky-700 cursor-pointer">
-                                    Modifier
-                                </Button>
-                                <Button className="rounded-md bg-red-900 hover:bg-red-700 cursor-pointer">
+                            <CardFooter className="flex justify-end gap-2">                                
+                                <Button
+                                    type="button"
+                                    onClick={()=>handleDelete(car.id)} 
+                                    className="rounded-md bg-red-900 hover:bg-red-700 cursor-pointer">
                                     Supprimer
                                 </Button>
                             </CardFooter>

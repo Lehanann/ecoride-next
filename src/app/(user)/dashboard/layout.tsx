@@ -1,11 +1,22 @@
-import DashboardSidebar from "@/components/dashboard/sections/DashboardSidebar";
 import type { Metadata } from "next";
+
+import DashboardSidebar from "@/components/dashboard/sections/DashboardSidebar";
 
 export const metadata: Metadata = {
   title: "Dashboard",
   description: "website of carpooling ecoresponsable",
 };
 
+/**
+* Dashboard layout.
+*
+* Provides the main dashboard structure by combining
+* the dashboard sidebar navigation and page content area.
+*
+* @param props Layout properties.
+* @param props.children Dashboard page content.
+* @returns Dashboard layout component.
+*/
 export default function DashboardLayout({
   children,
 }: Readonly<{

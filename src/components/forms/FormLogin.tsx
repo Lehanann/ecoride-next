@@ -1,8 +1,9 @@
 "use client"
+
+import Link from "next/link";
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import Link from "next/link";
 
 import { useRouter } from "next/navigation";
 import { getCurrentUser, login } from "@/services/auth";
@@ -13,6 +14,12 @@ import { Input } from "../ui/input"
 import { Button } from "../ui/button"
 import { toast } from "sonner";
 
+/**
+ * Login form validation schema.
+ *
+ * Defines validation rules applied before attempting
+ * user authentication.
+ */
 const formSchema = z.object({
     email: z.email(),
     password: z.string().min(1, "Ce champs est requis")
@@ -20,6 +27,22 @@ const formSchema = z.object({
 
 type FormData = z.infer<typeof formSchema>;
 
+/**
+ * User authentication form.
+ *
+ * Allows users to authenticate using their email address
+ * and password.
+ *
+ * After a successful login, the authenticated user is loaded
+ * and redirected according to their role:
+ * - Administrator → Admin dashboard
+ * - Employee → Moderation dashboard
+ * - User → User dashboard
+ *
+ * Form validation is performed using react-hook-form and zod.
+ *
+ * @returns Login form component.
+ */
 export default function FormLogin(){
 
     const router = useRouter()
@@ -34,6 +57,16 @@ export default function FormLogin(){
         }
     })
 
+    /**
+     * Handles login form submission.
+     *
+     * Authenticates the user, loads the authenticated profile,
+     * updates the authentication context, redirects the user
+     * according to their role, and displays a notification
+     * indicating whether the operation succeeded or failed.
+     *
+     * @param values Validated login credentials.
+     */
     async function onSubmit(values: FormData){
 
         try{
@@ -83,11 +116,9 @@ export default function FormLogin(){
             </div>
             <Link href="/register" className="text-sm text-red-500 font-medium">Pas de compte? Inscrivez-vous</Link>
             <div className="flex items-center justify-between mt-5 mb-2">
-                <Button onClick={()=>router.push("/")} variant="outline" className="tracking-wider px-4">Annuler</Button>
+                <Button type="button" onClick={()=>router.push("/")} variant="outline" className="tracking-wider px-4">Annuler</Button>
                 <Button type="submit" className="bg-[var(--color-primary)] tracking-wider px-4 ">Valider</Button>                
-            </div>          
-           
+            </div>
         </form>
-
     )
 }

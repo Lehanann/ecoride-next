@@ -1,8 +1,14 @@
 import Opinions from "@/components/dashboard/opinion/Opinions";
 
-
+/**
+* Driver opinions page.
+*
+* Displays validated opinions received from passengers
+* who participated in the driver's carpoolings.
+*
+* @returns Driver opinions page.
+*/
 export default function OpinionPage(){
-
     return(
          <section className="space-y-8">
             <div>

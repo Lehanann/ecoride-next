@@ -1,5 +1,14 @@
 import Participations from "@/components/dashboard/passenger/Participation";
 
+/**
+ * User reservations page.
+ *
+ * Displays the list of carpoolings reserved by the
+ * authenticated user and provides access to opinion
+ * submission for completed trips.
+ *
+ * @returns User reservations page.
+ */
 export default function BookingsPage(){
 
     return(

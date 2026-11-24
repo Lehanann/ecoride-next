@@ -1,18 +1,16 @@
 "use client"
 
-import { useAuth } from "@/hooks/useAuth";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 
-import EmployeeProfile from "@/components/moderation/EmployeeProfile";
-import { OpinionType } from "@/types/opinion";
+import { useAuth } from "@/hooks/useAuth";
 import { getPendingOpinions, validateOpinion, rejectOpinion } from "@/services/opinion";
+import { OpinionType } from "@/types/opinion";
+import EmployeeProfile from "../../../../trash/components/moderation/EmployeeProfile";
 
 import { toast } from "sonner";
 import {
   Card,
-  CardAction,
   CardContent,
   CardDescription,
   CardFooter,
@@ -21,6 +19,21 @@ import {
 } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 
+/**
+ * Opinion moderation dashboard page.
+ *
+ * Allows employees to review and moderate opinions
+ * submitted by users before publication.
+ *
+ * Features:
+ * - Restricts access to employees.
+ * - Displays pending opinions.
+ * - Approves opinions.
+ * - Rejects opinions.
+ * - Updates the moderation queue in real time.
+ *
+ * @returns Opinion moderation dashboard page.
+ */
 export default function ModerationPage(){
 
     const { user, isLoading } = useAuth()
@@ -47,21 +60,32 @@ export default function ModerationPage(){
 
     useEffect(()=>{
         if (!user || !isEmployee) return;
-
+        
+        /**
+         * Retrieves all opinions awaiting moderation.
+         *
+         * Loads the moderation queue displayed to employees.
+         */
         async function loadOpinions(){
             try{
                 const data: OpinionType[] = await getPendingOpinions()
                 setOpinions(data)
             }
-            catch(error){
-                console.error(error);
+            catch(error: any){
+                toast.error(error);
             }
         }
-
         loadOpinions()
-
     }, [user, isEmployee])
 
+    /**
+     * Approves an opinion.
+     *
+     * Validates the selected opinion, removes it from the 
+     * moderation queue and displays a success or error notification.
+     * 
+     * @param id Identifier of the opinion to approve.
+     */
     async function handleApproved(id: number){
         try{
             await validateOpinion(id);
@@ -77,8 +101,15 @@ export default function ModerationPage(){
         }
     }
 
-    async function handleRejected(id: number){
-    
+    /**
+     * Rejects an opinion.
+     *
+     * Rejects the selected opinion, removes it from the
+     * moderation queue's and displays a success or error notification.
+     *
+     * @param id Identitier of the opinion to reject.
+     */
+    async function handleRejected(id: number){    
         try{
             await rejectOpinion(id);
             setOpinions(current => 
@@ -99,12 +130,10 @@ export default function ModerationPage(){
 
     return(
         <section className="grid grid-cols-[1fr_3fr]">
-           
            <EmployeeProfile employee={user}/>
            <div className="flex flex-wrap gap-5 px-6">
             {
                 opinions.map((opinion) => (
-
                     <Card key={opinion.id} className="w-full max-w-xs" size="sm">
                         <CardHeader>
                             <CardTitle className="flex justify-between">
@@ -117,7 +146,8 @@ export default function ModerationPage(){
                         </CardHeader>
                         <CardContent className="flex flex-col gap-2">
                             <p>
-                                <span className="font-medium">Auteur de l'avis&nbsp;:&nbsp;</span> 
+                                <span className="font-medium">Auteur de l'avis&nbsp;:&nbsp;</span>
+                                <span>{opinion.author.username}</span>
                                 <span className="font-semibold"></span>
                             </p>
                             <p className="font-medium">
@@ -126,7 +156,6 @@ export default function ModerationPage(){
                                 <span>/5</span> 
                             </p>
                             <p className="line-clamp-2">{opinion.comment}</p>
-                            <Link href="" className="text-sky-500 font-medium text-lg underline">Détail du post</Link>
                         </CardContent>
                         <CardFooter className="flex justify-between ">
                             <Button
@@ -142,13 +171,10 @@ export default function ModerationPage(){
                                 Avis accepté
                             </Button>                
                         </CardFooter>
-
                     </Card>
                 ))
-            }
-                
+            }   
            </div>
-           
         </section>
     )
 }

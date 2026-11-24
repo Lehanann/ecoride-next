@@ -1,6 +1,15 @@
 import Image from "next/image";
 import BannerImg from "../../../public/banner.png"
 
+/**
+* Home page hero section.
+*
+* Displays the main promotional banner and highlights
+* the EcoRide value proposition on the application's
+* home page.
+*
+* @returns Hero section component.
+*/
 export default function Hero(){
     return(
         <section className="w-full h-[350px] relative">

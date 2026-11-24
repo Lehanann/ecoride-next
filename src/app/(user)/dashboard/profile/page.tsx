@@ -4,15 +4,26 @@ import PasswordCard from "@/components/profile/PasswordCard";
 import ProfileCard from "@/components/profile/ProfileCard";
 import RolesCard from "@/components/profile/RolesCard";
 
-
+/**
+* User profile management page.
+*
+* Provides access to all profile-related settings,
+* including:
+* - Avatar management.
+* - Account information.
+* - Personal information.
+* - Role management.
+* - Password update.
+*
+* @returns User profile management page.
+*/
 export default function ProfilePage(){
 
     return(
         <section className="grid grid-cols-1 lg:grid-cols-3 space-x-6">
             <div className="flex flex-col space-y-6">
                 <AvatarCard />
-                <AccountCard />
-                                            
+                <AccountCard />                                            
             </div>
             <div className="space-y-6">
                 <RolesCard /> 

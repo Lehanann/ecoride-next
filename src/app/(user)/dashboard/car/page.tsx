@@ -1,11 +1,21 @@
 "use client"
 
-import Cars from "@/components/dashboard/driver/Cars";
-import FormCar from "@/components/forms/FormCar";
-import { useAuth } from "@/hooks/useAuth";
-import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
+import { useAuth } from "@/hooks/useAuth";
+import Cars from "@/components/dashboard/driver/Cars";
+
+/**
+* Driver vehicles management page.
+*
+* Allows drivers to manage their registered vehicles,
+* including creation, modification, and deletion.
+*
+* Access is restricted to users with the driver role.
+*
+* @returns Driver vehicles management page.
+*/
 export default function CreateNewCar(){
 
     const { user, isLoading } = useAuth()
@@ -16,7 +26,6 @@ export default function CreateNewCar(){
 
     useEffect(()=>{
         if (isLoading) return;
-
         if (!user){
             router.replace("/login");
             return;

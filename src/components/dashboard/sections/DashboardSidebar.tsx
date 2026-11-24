@@ -8,6 +8,15 @@ import { Badge } from "@/components/ui/badge"
 import { LayoutDashboard, Car, Flag, Star, Road, Settings } from 'lucide-react';
 import Link from "next/link";
 
+/**
+ * Dashboard navigation items.
+ *
+ * Each entry defines:
+ * - A label.
+ * - A route.
+ * - An icon.
+ * - The role required to display the item.
+ */
 const menu = [
     {id: 0, name: "Dashboard", path: "/dashboard", icon: LayoutDashboard , role: "all"},
     {id: 1, name: "Mes participations", path: "/dashboard/bookings", icon: Road , role: "passenger"},
@@ -17,6 +26,19 @@ const menu = [
     {id: 5, name: "Profil", path: "/dashboard/profile", icon: Settings , role: "all"},
 ]
 
+/**
+ * Dashboard navigation sidebar.
+ *
+ * Displays:
+ * - Authenticated user information.
+ * - User roles.
+ * - Dashboard navigation links.
+ *
+ * Available navigation items are filtered according
+ * to the roles assigned to the authenticated user.
+ *
+ * @returns Dashboard sidebar component.
+ */
 export default function DashboardSidebar(){
 
     const { user, isLoading } = useAuth()

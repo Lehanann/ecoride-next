@@ -6,10 +6,17 @@ import{
     CardContent 
 } from "../ui/card";
 
-import { KeySquare,Lock } from 'lucide-react';
+import { Lock } from 'lucide-react';
 
+/**
+ * Password management card.
+ *
+ * Displays the password update form inside
+ * a dashboard card section.
+ *
+ * @returns Password management card component.
+ */
 export default function PasswordCard(){
-
     return(
        <Card className="border rounded-md">
             <CardHeader className="border-b">

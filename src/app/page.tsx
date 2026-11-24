@@ -1,24 +1,48 @@
 "use client"
-import Hero from "@/components/hero/hero";
-import SearchBar from "@/components/sections/SearchBar";
-import { Sprout, HandCoins, Handshake, Search, MousePointer2, Car } from 'lucide-react';
-import Image from "next/image";
-import Mountains from "../../public/mountains.jpg";
-import Notice from "../../public/noticesv2.png";
-import { Button } from "@/components/ui/button";
+
 import { useRouter } from "next/navigation";
+import Image from "next/image";
+
+import SearchBar from "@/components/sections/SearchBar";
+import Hero from "@/components/hero/hero";
 import { SearchData } from "@/types/search";
 
+import Mountains from "../../public/mountains.jpg";
+
+import { Sprout, HandCoins, Handshake, Search, MousePointer2, Car } from 'lucide-react';
+
+/**
+* Home page.
+*
+* Serves as the main entry point of the application and provides:
+* - Carpooling search.
+* - Presentation of the EcoRide concept.
+* - Explanation of the booking process.
+* - Presentation of the platform values.
+*
+* @returns Home page.
+*/
 export default function HomePage() {
 
   const router = useRouter()
 
+  /**
+  * Handles carpooling search requests.
+  *
+  * Builds the search query parameters from the user input
+  * and redirects the user to the carpooling search results page.
+  *
+  * @param data Search criteria entered by the user.
+  */
   function handleSearch(data: SearchData){
     const params = new URLSearchParams({
       departure: data.departure_location,
       arrival: data.end_location,
-      date: data.departure_date
     })
+
+    if (data.departure_date){
+      params.append("date", data.departure_date)
+    }
 
     router.push(`/carpooling?${params.toString()}`)
 

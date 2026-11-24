@@ -1,22 +1,40 @@
 "use client"
 
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+
 import { useAuth } from "@/hooks/useAuth";
 import { getDashboardStatistics } from "@/services/statistics";
 import { DashboardStatistics } from "@/types/dashboardstats";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 
+import { Bar, BarChart, XAxis, YAxis } from "recharts";
 import {
   Card,
-  CardAction,
   CardContent,
-  CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Bar, BarChart, XAxis, YAxis } from "recharts";
-import { ChartContainer, ChartTooltipContent, type ChartConfig  } from "@/components/ui/chart"
+
+import { toast } from "sonner"
+
+import { ChartContainer, type ChartConfig  } from "@/components/ui/chart"
+
+/**
+ * Administrator dashboard page.
+ *
+ * Provides administrators with platform statistics,
+ * including:
+ * - Daily revenue.
+ * - Weekly revenue.
+ * - Daily carpooling activity.
+ * - Weekly carpooling activity.
+ * - Revenue trends over the last seven days.
+ * - Carpooling trends over the last seven days.
+ *
+ * Access is restricted to users with the administrator role.
+ *
+ * @returns Administrator dashboard page.
+ */
 
 export default function AdminPage(){
     const { user, isLoading } = useAuth()
@@ -41,30 +59,46 @@ export default function AdminPage(){
 
     useEffect(()=>{
         if (!user || !isAdmin) return;
+        /**
+         * Retrieves dashboard statistics for administrators.
+         *
+         * Loads revenue and carpooling metrics used to populate
+         * dashboard cards and charts.
+         */
         async function loadStats(){
-
-            const result = await getDashboardStatistics();
-            setStats(result)
+            try{
+                const result = await getDashboardStatistics();
+                setStats(result)
+            }
+           catch{
+            toast.error("Impossible de charger les statistiques.")
+           }
         }
-
         loadStats()
-
     }, [user , isAdmin])
 
+    /**
+     * Revenue chart configuration.
+     *
+     * Defines labels and colors used by the revenue chart.
+     */
     const chartConfigRevenue = {
         amount: {
             label: "Revenue",
             color: "#2563eb"
         }
-
     } satisfies ChartConfig
 
+    /**
+     * Carpooling chart configuration.
+     *
+     * Defines labels and colors used by the carpooling chart.
+     */
     const chartConfigCarpooling = {
         count: {
             label: "Covoiturage",
             color: "#16a34a"
         }
-
     } satisfies ChartConfig
 
     if(isLoading){ return (<p>Chargement...</p>)}

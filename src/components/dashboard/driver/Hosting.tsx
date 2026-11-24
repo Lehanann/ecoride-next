@@ -1,7 +1,6 @@
 "use client"
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 
 import { Carpooling, carpoolingStatus } from "@/types/carpooling";
 import { apiFetch } from "@/services/api";
@@ -19,28 +18,51 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import { toast } from "sonner";
 
 import { SquareActivity } from "lucide-react"
 
+/**
+ * Driver carpooling management component.
+ *
+ * Allows authenticated drivers to:
+ * - View their carpoolings.
+ * - Create new carpoolings.
+ * - Track trip status.
+ * - Update trip progression.
+ * - Cancel carpoolings.
+ *
+ * @returns Driver carpooling management component.
+ */
 export default function Hosting(){
-
-    const router = useRouter()
 
     const [ carpoolings, setCarpoolings ] = useState<Carpooling[]>([])
 
-    const [isOpen, setIsOpen ] = useState(false)
+    const [ isOpen, setIsOpen ] = useState(false)
 
+    /**
+     * Retrieves all carpoolings created by the authenticated user.
+     *
+     * Loads and refreshes the list displayed in the dashboard.
+     */
     async function loadCarpooling(){
         const data: Carpooling[] = await apiFetch("/carpoolings/me", {method: "GET"})
             setCarpoolings(data)
     }
 
     useEffect(()=>{
-
         loadCarpooling()
-        
     },[])
 
+    /**
+     * Updates the status of a carpooling.
+     *
+     * Sends the new status to the backend API and refreshes
+     * the displayed carpoolings after a successful update.
+     * 
+     * @param carpooling_id Identifier of the carpooling to update.
+     * @param status New carpooling status.
+     */
     async function updateStatus(carpooling_id: number, status: carpoolingStatus){
         try{
             await apiFetch(`/carpoolings/${carpooling_id}/status`, {
@@ -48,11 +70,11 @@ export default function Hosting(){
                 body: JSON.stringify({status})
             })
             await loadCarpooling()
+            toast.success("Mise à jour du covoiturage effectué avec succès")
         }
-        catch (error){
-
+        catch (error: any){
+            toast.error(error.message)
         }
-
     }
 
     return (
@@ -75,7 +97,7 @@ export default function Hosting(){
                         Vous devez fixer votre prix au dessus de ces 2.00 crédits pour créditer votre compte.
                     </DialogDescription>
                 </DialogHeader>
-                <FormHosting onCancel={()=> setIsOpen(false)}/>
+                <FormHosting onCancel={()=> setIsOpen(false)} onSuccess={loadCarpooling}/>
             </DialogContent>
         </Dialog>
         <hr className="border-zinc-500"/>

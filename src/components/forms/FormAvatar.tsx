@@ -10,12 +10,31 @@ import { Input } from "../ui/input"
 import { Button } from "../ui/button"
 import { toast } from "sonner"
 
+/**
+ * Avatar upload form.
+ *
+ * Allows authenticated users to upload and update
+ * their profile avatar.
+ *
+ * The selected image is sent to the backend using
+ * multipart form data.
+ *
+ * @returns Avatar upload form component.
+ */
 export default function FormAvatar(){
 
     const { setUser } = useAuth()
 
     const [ file, setFile ] = useState<File | null>(null)
 
+    /**
+     * Handles avatar upload submission.
+     *
+     * Validates that a file has been selected, uploads
+     * the image to the backend API, updates the authenticated
+     * user stored in the authentication context, and displays
+     * a success or error notification.
+     */
     async function onSubmit(){
         
         if(!file){

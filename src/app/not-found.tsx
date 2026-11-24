@@ -1,6 +1,14 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
+/**
+ * Not found page.
+ *
+ * Displays a 404 error page when the requested route
+ * does not exist and provides a link back to the home page.
+ *
+ * @returns Not found page.
+ */
 export default function NotFound() {
     return (
         <main className="flex flex-col items-center justify-center gap-6 border flex-1">

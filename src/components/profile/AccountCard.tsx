@@ -9,6 +9,14 @@ import {
 
 import { SquareUser } from 'lucide-react';
 
+/**
+ * Account settings card.
+ *
+ * Displays the account information form inside
+ * a dashboard card section.
+ *
+ * @returns Account settings card component.
+ */
 export default function AccountCard(){
 
     return(
@@ -18,8 +26,7 @@ export default function AccountCard(){
             </CardHeader>
             <CardContent>
                 <FormAccount/>
-            </CardContent>
-            
+            </CardContent>            
         </Card>
     )
 }

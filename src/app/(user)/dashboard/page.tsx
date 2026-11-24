@@ -1,11 +1,26 @@
 "use client"
-import { useEffect } from "react"
 
+import { useEffect } from "react"
 import { useRouter } from "next/navigation";
+
 import { useAuth } from "@/hooks/useAuth";
 
 import { User, Activity} from "lucide-react";
 
+/**
+* User dashboard home page.
+*
+* Displays an overview of the authenticated user's profile
+* and recent activity, including:
+* - Personal information.
+* - Available credits.
+* - Driver activity summary.
+* - Passenger activity summary.
+*
+* Access is restricted to authenticated users.
+*
+* @returns User dashboard home page.
+*/
 export default function DashboardPage(){
 
     const { user, isLoading } = useAuth()

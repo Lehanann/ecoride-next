@@ -6,6 +6,16 @@ export const metadata: Metadata = {
   description: "Dashboard moderation",
 };
 
+/**
+* Employee layout.
+*
+* Provides a protected layout for moderation pages
+* and wraps employee content with role-based access control.
+*
+* @param props Layout properties.
+* @param props.children Employee page content.
+* @returns Employee layout component.
+*/
 export default function EmployeeLayout({
   children,
 }: Readonly<{

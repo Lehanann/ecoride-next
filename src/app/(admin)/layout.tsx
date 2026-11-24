@@ -6,6 +6,16 @@ export const metadata: Metadata = {
   description: "",
 };
 
+/**
+ * Administrator layout.
+ *
+ * Wraps administrator pages with access control
+ * and provides a common layout for the administration area.
+ *
+ * @param props Layout properties.
+ * @param props.children Administrator page content.
+ * @returns Administrator layout component.
+ */
 export default function AdminLayout({
   children,
 }: Readonly<{

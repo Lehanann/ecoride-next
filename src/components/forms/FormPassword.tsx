@@ -11,6 +11,17 @@ import { Input } from "../ui/input"
 import { Button } from "../ui/button"
 import { toast } from 'sonner';
 
+/**
+ * Password update form validation schema.
+ *
+ * Defines validation rules applied before changing
+ * the authenticated user's password.
+ *
+ * Ensures that:
+ * - All password fields are provided.
+ * - Passwords meet the minimum length requirement.
+ * - The confirmation password matches the new password.
+ */
 const formSchema = z.object({
     old_password: z.string().min(14,"Le mot de passe doit contenir 14 caractères min"),
     new_password: z.string().min(14, "Le mot de passe doit contenir 14 caractères min"),
@@ -24,7 +35,18 @@ const formSchema = z.object({
 
 type FormData = z.infer<typeof formSchema>;
 
-
+/**
+ * Password update form.
+ *
+ * Allows authenticated users to change their password by providing:
+ * - Their current password.
+ * - A new password.
+ * - A confirmation of the new password.
+ *
+ * Form validation is performed using react-hook-form and zod.
+ *
+ * @returns Password update form component.
+ */
 export default function FormPassword(){
     
     const { register, handleSubmit ,reset, formState: {errors} } = useForm<FormData>({
@@ -36,6 +58,15 @@ export default function FormPassword(){
         }
     })
 
+    /**
+     * Handles password update form submission.
+     *
+     * Sends the password update request to the backend API,
+     * resets the form on success, and displays a notification
+     * indicating whether the operation succeeded or failed.
+     *
+     * @param values Validated password update data.
+     */
     async function onSubmit(values: FormData){
             
         try{

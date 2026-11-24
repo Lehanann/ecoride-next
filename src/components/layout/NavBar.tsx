@@ -2,20 +2,32 @@
 
 import Link from "next/link"
 import { House, Car, Form, LayoutDashboard } from 'lucide-react'
-import { useState } from "react"
 import { useAuth } from "@/hooks/useAuth"
 
+/**
+ * Main navigation menu items.
+ *
+ * Defines the navigation links displayed
+ * in the application's primary navigation bar.
+ */
 const menuNav = [
     { id:1, name:'Accueil', path: '/', icon: House},
     { id:2, name:'Covoiturage', path: '/carpooling', icon: Car},
     { id:3, name:'Contact', path: '/contact', icon: Form}
-  ]
+]
   
-
+/**
+ * Main application navigation component.
+ *
+ * Displays public navigation links and provides
+ * access to the user dashboard when a user is
+ * authenticated.
+ *
+ * @returns Main navigation component.
+ */
 export default function NavBar(){
 
     const { user } = useAuth()
-
 
     return(
         <nav className="flex flex-1">
@@ -39,12 +51,8 @@ export default function NavBar(){
                             </Link>
                         </li>
                     )
-                    
                 }
-                
-
             </ul>
-        </nav>
-        
+        </nav>    
     )
 }

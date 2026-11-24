@@ -8,6 +8,14 @@ import{
 
 import { Image } from 'lucide-react';
 
+/**
+ * Avatar management card.
+ *
+ * Displays the avatar update form inside
+ * a dashboard card section.
+ *
+ * @returns Avatar management card component.
+ */
 export default function AvatarCard(){
 
     return(
